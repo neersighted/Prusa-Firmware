@@ -808,7 +808,15 @@ void mmu_load_to_nozzle()
     float feedrate = 562;
 	plan_buffer_line_curposXYZE(feedrate / 60);
     st_synchronize();
-	current_position[E_AXIS] += 14.4f;
+	#if defined(BONDTECH_MK25S) || defined(BONDTECH_MK3S)
+		current_position[E_AXIS] += 25.4f; // 11mm longer melt zone
+	#elif defined(BONDTECH_MOSQUITO)
+		current_position[E_AXIS] += 23.4f; // 9mm longer melt zone
+	#elif defined(BONDTECH_MOSQUITO_MAGNUM)
+		current_position[E_AXIS] += 18.4f; // 5mm longer melt zone
+	#else
+		current_position[E_AXIS] += 14.4f;
+	#endif
 	feedrate = 871;
 	plan_buffer_line_curposXYZE(feedrate / 60);
     st_synchronize();
@@ -816,7 +824,13 @@ void mmu_load_to_nozzle()
 	feedrate = 1393;
 	plan_buffer_line_curposXYZE(feedrate / 60);
     st_synchronize();
-	current_position[E_AXIS] += 14.4f;
+	#if defined(BONDTECH_MOSQUITO)
+		current_position[E_AXIS] += 16.4f; // 2mm further through heat block
+	#elif defined(BONDTECH_MOSQUITO_MAGNUM)
+		current_position[E_AXIS] += 21.4f; // 7mm further through heat block
+	#else
+		current_position[E_AXIS] += 14.4f;
+	#endif
 	feedrate = 871;
 	plan_buffer_line_curposXYZE(feedrate / 60);
     st_synchronize();
@@ -1444,9 +1458,29 @@ bFilamentAction=false;                            // NOT in "mmu_fil_eject_menu(
 //! @retval false Doesn't fit
 static bool can_load()
 {
-    current_position[E_AXIS] += 60;
+    #if defined(BONDTECH_MK25S) || defined(BONDTECH_MK3S)
+        current_position[E_AXIS] += 71; // 71mm from drive gear to melt zone
+    #elif defined(BONDTECH_MOSQUITO)
+        current_position[E_AXIS] += 70; // 70mm from drive gear to melt zone
+    #elif defined(BONDTECH_MOSQUITO_MAGNUM)
+        current_position[E_AXIS] += 62; // 62mm from drive gear to melt zone
+    #elif defined(BEAR_EXTRUDER)
+	current_position[E_AXIS] += 65; // 65mm from drive gear to melt zone
+    #else
+	current_position[E_AXIS] += 60;
+    #endif
     plan_buffer_line_curposXYZE(MMU_LOAD_FEEDRATE);
-    current_position[E_AXIS] -= 52;
+    #if defined(BONDTECH_MK25S) || defined(BONDTECH_MK3S)
+        current_position[E_AXIS] -= 63; // retract 63mm (8mm below drive gear)
+    #elif defined(BONDTECH_MOSQUITO)
+        current_position[E_AXIS] -= 62; // retract 62mm (8mm below drive gear)
+    #elif defined(BONDTECH_MOSQUITO_MAGNUM)
+        current_position[E_AXIS] -= 54; // retract 54mm (8mm below drive gear)
+    #elif defined(BEAR_EXTRUDER)
+	current_position[E_AXIS] -= 58; // retract 57mm (7mm below drive gear)
+    #else
+	current_position[E_AXIS] -= 52;
+    #endif
     plan_buffer_line_curposXYZE(MMU_LOAD_FEEDRATE);
     st_synchronize();
 
