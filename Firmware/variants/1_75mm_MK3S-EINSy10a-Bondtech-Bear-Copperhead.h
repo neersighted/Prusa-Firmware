@@ -19,7 +19,7 @@
 #define DEVELOPER
 
 // Printer name
-#define CUSTOM_MENDEL_NAME "Bondtech-Bear-Slice MK3S"
+#define CUSTOM_MENDEL_NAME "Prusa i3 MK3S BBS"
 
 // Electronics
 #define MOTHERBOARD BOARD_EINSY_1_0a
